@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xue.viewpagerdemo.callback.OnReadyPullListener;
+import com.xue.viewpagerdemo.callback.OnRefreshListener;
 import com.xue.viewpagerdemo.common.AdapterItem;
 import com.xue.viewpagerdemo.common.BaseAdapter;
 import com.xue.viewpagerdemo.common.BaseViewHolder;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private NestedViewModel viewModel;
 
     private NestedScrollLayout container;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         container = findViewById(R.id.rootview);
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setNestedScrollingEnabled(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
         container.setRootList(recyclerView);
         container.setTarget(this);
         initAdapter();
@@ -61,6 +65,36 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.getPagerHeight().setValue(height);
             }
         });
+
+        container.setReadyListener(new OnReadyPullListener() {
+            @Override
+            public boolean isReady() {
+                return mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+            }
+        })
+                .setRefreshable(true)
+                .setDefaultRefreshView(new OnRefreshListener() {
+                    @Override
+                    public void onRefreshing() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                //刷新完成后需要调用onRefreshComplete()通知FlexibleLayout
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        container.onRefreshComplete();
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+                });
     }
 
     private void initAdapter() {
@@ -81,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new BaseAdapter(itemList, this, viewHolders);
         recyclerView.setAdapter(adapter);
     }
-
 
 
 }
