@@ -14,4 +14,13 @@
         <attr name="pstsTextAllCaps" format="boolean" />
         <attr name="selectedTabTextColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="TabIndicator">
+        <attr name="tab_textColor" format="color" />
+        <attr name="tab_selectTextColor" format="color" />
+        <attr name="tab_textSize" format="dimension" />
+        <attr name="tab_indicatorHeight" format="dimension" />
+        <attr name="tab_indicatorColor" format="color" />
+        <attr name="tab_adjustMode" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -8,6 +8,7 @@ import com.xue.viewpagerdemo.R;
 import com.xue.viewpagerdemo.SubPagerAdapter;
 import com.xue.viewpagerdemo.common.BaseViewHolder;
 import com.xue.viewpagerdemo.common.HolderAnnotation;
+import com.xue.viewpagerdemo.inidicator.TabIndicator;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.model.PageVO;
 
@@ -28,7 +29,7 @@ public class PagerViewHolder extends BaseViewHolder<List<PageVO>> {
 
     private ViewPager viewPager;
 
-    private TabLayout tabLayout;
+    private TabIndicator tabLayout;
 
     private PagerAdapter pagerAdapter;
 
@@ -54,7 +55,6 @@ public class PagerViewHolder extends BaseViewHolder<List<PageVO>> {
     public void initViews() {
         viewPager = itemView.findViewById(R.id.viewpager);
         tabLayout = itemView.findViewById(R.id.tablayout);
-        tabLayout.setupWithViewPager(viewPager, true);
         viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -96,7 +96,7 @@ public class PagerViewHolder extends BaseViewHolder<List<PageVO>> {
             FragmentActivity fragmentActivity = (FragmentActivity) context;
             pagerAdapter = new SubPagerAdapter(fragmentActivity.getSupportFragmentManager(), model);
             viewPager.setAdapter(pagerAdapter);
-            pagerAdapter.notifyDataSetChanged();
+            tabLayout.setupWithViewPager(viewPager);
             viewModel = ViewModelProviders.of(fragmentActivity).get(NestedViewModel.class);
             viewModel.getPagerHeight().removeObserver(observer);
             viewModel.getPagerHeight().observe(fragmentActivity, observer);
