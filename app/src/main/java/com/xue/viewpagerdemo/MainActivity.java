@@ -27,6 +27,7 @@ import com.xue.viewpagerdemo.items.ParentItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.model.PageVO;
 import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
+import com.xue.viewpagerdemo.util.StatusBarUtil;
 import com.xue.viewpagerdemo.viewholder.ImageViewHolder;
 import com.xue.viewpagerdemo.viewholder.PagerViewHolder;
 
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                         }).start();
                     }
                 });
+
+        StatusBarUtil.darkMode(this);
     }
 
     private void initAdapter() {
