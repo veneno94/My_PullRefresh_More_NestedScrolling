@@ -3,17 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/more_tv"
-        android:visibility="gone"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:text="加载更多..."
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
 </FrameLayout>

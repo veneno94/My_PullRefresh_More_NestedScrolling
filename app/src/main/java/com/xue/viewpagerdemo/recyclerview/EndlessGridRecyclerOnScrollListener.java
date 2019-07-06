@@ -8,6 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public abstract class EndlessGridRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
+    private HeadFootRecyclerView headFootRecyclerView;
+
+    protected EndlessGridRecyclerOnScrollListener( HeadFootRecyclerView headFootRecyclerView) {
+        this.headFootRecyclerView = headFootRecyclerView;
+    }
+
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -15,11 +22,11 @@ public abstract class EndlessGridRecyclerOnScrollListener extends RecyclerView.O
         if(dy<=0)return;
 
         //新的监听滑动到底部
-        if (isSlideToBottom(recyclerView)) {
+        if (isSlideToBottom(recyclerView) && !headFootRecyclerView.isLoadMore() && !headFootRecyclerView.isNoMore()) {
+            headFootRecyclerView.setLoadMore(true);
             onLoadMore();
         }
     }
-
 
     //监听是否到底部
     private boolean isSlideToBottom(RecyclerView recyclerView) {

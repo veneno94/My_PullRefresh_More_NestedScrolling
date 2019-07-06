@@ -21,6 +21,7 @@ import com.xue.viewpagerdemo.common.BaseViewHolder;
 import com.xue.viewpagerdemo.items.TextItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.recyclerview.EndlessGridRecyclerOnScrollListener;
+import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
 import com.xue.viewpagerdemo.viewholder.TextViewHolder;
 
 import java.util.ArrayList;
@@ -31,12 +32,11 @@ import java.util.List;
  */
 public class SubFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private HeadFootRecyclerView recyclerView;
 
     private BaseAdapter adapter;
 
     private NestedViewModel viewModel;
-    private TextView mMoreTv;
 
     @Nullable
     @Override
@@ -53,8 +53,7 @@ public class SubFragment extends Fragment {
     private void init(View view) {
         int color = getArguments().getInt("color");
         recyclerView = view.findViewById(R.id.recyclerview);
-        mMoreTv = view.findViewById(R.id.more_tv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLinearLayout();
         recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setBackgroundColor(color);
 
@@ -65,18 +64,13 @@ public class SubFragment extends Fragment {
             itemList.add(new TextItem("text" + i));
         }
         adapter = new BaseAdapter(itemList, view.getContext(), viewHolders);
-        recyclerView.setAdapter(adapter);
-
-        mMoreTv.setVisibility(View.GONE);
-
-
+        recyclerView.setRecylcerViewAdapter(adapter);
     }
 
     private void initEvent() {
-        recyclerView.addOnScrollListener(new EndlessGridRecyclerOnScrollListener() {
+        recyclerView.setOnPullLoadMoreListener(new HeadFootRecyclerView.PullLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                mMoreTv.setVisibility(View.VISIBLE);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -89,11 +83,12 @@ public class SubFragment extends Fragment {
                             }
 
 
-                           getActivity().runOnUiThread(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mMoreTv.setVisibility(View.GONE);
                                     adapter.setItemList(itemList);
+                                    recyclerView.setPullLoadMoreCompleted();
+                                    adapter.notifyDataSetChanged();
                                 }
                             });
 
@@ -103,7 +98,6 @@ public class SubFragment extends Fragment {
                         }
                     }
                 }).start();
-
             }
         });
     }

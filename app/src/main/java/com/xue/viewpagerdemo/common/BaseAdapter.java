@@ -35,7 +35,6 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     public void setItemList(List<AdapterItem> itemList) {
         if (this.itemList != null ) {
             this.itemList.addAll(itemList);
-            notifyDataSetChanged();
         }
     }
 
