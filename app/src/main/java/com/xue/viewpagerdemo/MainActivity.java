@@ -5,7 +5,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.xue.viewpagerdemo.items.PageItem;
 import com.xue.viewpagerdemo.items.ParentItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.model.PageVO;
+import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
 import com.xue.viewpagerdemo.viewholder.ImageViewHolder;
 import com.xue.viewpagerdemo.viewholder.PagerViewHolder;
 
@@ -36,7 +40,7 @@ import static com.xue.viewpagerdemo.ViewType.TYPE_PARENT;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    private HeadFootRecyclerView recyclerView;
 
     private RecyclerView.Adapter adapter;
 
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private NestedScrollLayout container;
     private LinearLayoutManager mLayoutManager;
+    private View headView;
+    private ImageView headIv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         })
                 .setRefreshable(true)
+                .setHeader(headIv)
                 .setDefaultRefreshView(new OnRefreshListener() {
                     @Override
                     public void onRefreshing() {
@@ -98,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
+        headView = LayoutInflater.from(this).inflate(R.layout.head_view_item, recyclerView, false);
+        headIv = headView.findViewById(R.id.imageview);
+        headIv.setImageResource(R.mipmap.pic2);
         SparseArray<Class<? extends BaseViewHolder>> viewHolders = new SparseArray<>();
         viewHolders.put(TYPE_PARENT, ImageViewHolder.class);
         viewHolders.put(TYPE_PAGER, PagerViewHolder.class);
@@ -113,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
         }
         itemList.add(new PageItem(pageList));
         adapter = new BaseAdapter(itemList, this, viewHolders);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setRecylcerViewAdapter(adapter);
+        recyclerView.addHeadView(headView);
+
     }
 
 

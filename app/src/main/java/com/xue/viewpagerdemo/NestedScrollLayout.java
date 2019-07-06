@@ -121,7 +121,6 @@ public class NestedScrollLayout extends FrameLayout implements IFlexible {
     private RefreshAnimatorListener mRefreshAnimatorListener = new RefreshAnimatorListener();
 
 
-
     private View mChildView;
     /**
      * 最外层的RecyclerView
@@ -167,7 +166,7 @@ public class NestedScrollLayout extends FrameLayout implements IFlexible {
         mScrollViewModel.getChildList().observe(target, new Observer<View>() {
             @Override
             public void onChanged(@Nullable View view) {
-                Log.d("xuetest","onChanged");
+                Log.d("xuetest", "onChanged");
                 mChildList = (RecyclerView) view;
             }
         });
@@ -188,7 +187,7 @@ public class NestedScrollLayout extends FrameLayout implements IFlexible {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         log("onInterceptTouchEvent");
-        if (isEnable &&  isReady()) {
+        if (isEnable && isHeaderReady() && isReady()) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     log("onInterceptTouchEvent DOWN");
@@ -217,7 +216,7 @@ public class NestedScrollLayout extends FrameLayout implements IFlexible {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         log("onTouchEvent");
-        if (isEnable  && isReady()) {
+        if (isEnable && isHeaderReady() && isReady()) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_MOVE:
                     if (mIsBeingDragged) {
