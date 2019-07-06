@@ -18,20 +18,18 @@ import com.xue.viewpagerdemo.R;
 
 
 /**
+ *
  */
 
 public class HeadFootRecyclerView extends RecyclerView {
 
     private Context mContext;
     private HeaderViewGridRecyclerAdapter mAdapter;
-    private View loadMoreView;
     private boolean isLoading = true;
 
     private boolean isLoadMore = false;
-    private boolean isNoMore = false;//没有更多了
-    private ProgressBar mProgressBar;
-    private TextView mLoadTv;
-    private LinearLayout loadMoreLl;
+    private boolean isNoMore = false;//没有更多了 false为有更多
+    private FooterView footerView;
 
 
     public HeadFootRecyclerView(Context context) {
@@ -54,8 +52,8 @@ public class HeadFootRecyclerView extends RecyclerView {
         addOnScrollListener(new EndlessGridRecyclerOnScrollListener(this) {
             @Override
             public void onLoadMore() {
-                if (mPullLoadMoreListener != null) {
-                    loadMoreLl.setVisibility(View.VISIBLE);
+                if (mPullLoadMoreListener != null && footerView != null) {
+                    footerView.setState(FooterView.Loading);
                     mPullLoadMoreListener.onLoadMore();
                 }
             }
@@ -67,15 +65,12 @@ public class HeadFootRecyclerView extends RecyclerView {
      * 刷新时调用
      */
     public void onRefresh() {
-        setNoMore(false);
+        isNoMore = false;
         setIsLoading(true);
-        if (mProgressBar != null && mLoadTv != null) {
-            loadMoreLl.setVisibility(GONE);
-            mProgressBar.setVisibility(VISIBLE);
-            mLoadTv.setText("正在加载中...");
+        if (footerView != null) {
+            footerView.setState(FooterView.Normal);
         }
     }
-
 
     public void setLinearLayout() {
         CrashLinearLayoutManager linearLayoutManager = new CrashLinearLayoutManager(mContext);
@@ -105,12 +100,9 @@ public class HeadFootRecyclerView extends RecyclerView {
     public void setRecylcerViewAdapter(RecyclerView.Adapter adapter) {
         mAdapter = new HeaderViewGridRecyclerAdapter(adapter);
         setAdapter(mAdapter);
-        loadMoreView = LayoutInflater.from(mContext).inflate(R.layout.layout_load_more, this, false);
-        loadMoreLl =  loadMoreView.findViewById(R.id.load_more_ll);
-        mProgressBar =  loadMoreView.findViewById(R.id.load_pro);
-        mLoadTv =  loadMoreView.findViewById(R.id.load_tv);
-        mAdapter.addFooterView(loadMoreView);
-        loadMoreLl.setVisibility(View.GONE);
+        footerView = new FooterView(mContext);
+        mAdapter.addFooterView(footerView);
+        footerView.setState(FooterView.Normal);
 
     }
 
@@ -141,29 +133,21 @@ public class HeadFootRecyclerView extends RecyclerView {
         return isNoMore;
     }
 
-    public void setNoMore(boolean noMore) {
-        isNoMore = noMore;
-        if (!isNoMore) { //当是false的时候改变文字和显示圆圈
-            if (mProgressBar != null && mLoadTv != null) {
-                mProgressBar.setVisibility(VISIBLE);
-                mLoadTv.setText("正在加载中...");
-            }
+    //设置没有更多数据了
+    public void setNoMore(String text) {
+        if (footerView != null) {
+            isNoMore = true;
+            setLoadMore(false);
+            footerView.setState(FooterView.TheEnd);
+
         }
     }
 
-    //设置没有更多数据了
-    public void setNoMore(String text) {
-        setNoMore(true);
-        setLoadMore(false);
-        loadMoreLl.setVisibility(VISIBLE);
-        mProgressBar.setVisibility(GONE);
-        mLoadTv.setText(text);
-    }
-
-
     public void setPullLoadMoreCompleted() {
-        setLoadMore(false);
-        loadMoreLl.setVisibility(View.GONE);
+        if (footerView != null) {
+            setLoadMore(false);
+            footerView.setState(FooterView.Normal);
+        }
     }
 
     public interface PullLoadMoreListener {
