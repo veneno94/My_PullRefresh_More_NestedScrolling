@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by 薛贤俊 on 2019/2/21.
+ * Created by 薛雷 on 2019/2/21.
  */
 public class NestedViewModel extends ViewModel {
 

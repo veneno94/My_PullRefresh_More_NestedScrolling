@@ -4,7 +4,7 @@ import com.xue.viewpagerdemo.ViewType;
 import com.xue.viewpagerdemo.common.AdapterItem;
 
 /**
- * Created by 薛贤俊 on 2019/2/22.
+ * Created by 薛雷 on 2019/2/22.
  */
 public class TextItem implements AdapterItem<String> {
 

@@ -11,7 +11,7 @@ import com.xue.viewpagerdemo.common.HolderAnnotation;
 import androidx.annotation.NonNull;
 
 /**
- * Created by 薛贤俊 on 2019/2/21.
+ * Created by 薛雷 on 2019/2/21.
  */
 @HolderAnnotation(layoutId = R.layout.item_parent_holder)
 public class ImageViewHolder extends BaseViewHolder<Bitmap> {

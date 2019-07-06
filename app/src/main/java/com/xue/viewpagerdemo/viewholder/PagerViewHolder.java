@@ -21,7 +21,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 /**
- * Created by 薛贤俊 on 2019/2/21.
+ * Created by 薛雷 on 2019/2/21.
  */
 @HolderAnnotation(layoutId = R.layout.item_pager)
 public class PagerViewHolder extends BaseViewHolder<List<PageVO>> {

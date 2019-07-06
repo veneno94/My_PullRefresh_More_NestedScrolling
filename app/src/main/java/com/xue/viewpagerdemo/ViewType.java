@@ -1,7 +1,7 @@
 package com.xue.viewpagerdemo;
 
 /**
- * Created by 薛贤俊 on 2019/2/21.
+ * Created by 薛雷 on 2019/2/21.
  */
 public class ViewType {
     public static final int TYPE_PARENT = 1;

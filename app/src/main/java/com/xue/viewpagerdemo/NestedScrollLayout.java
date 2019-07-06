@@ -31,7 +31,7 @@ import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.util.PullAnimatorUtil;
 
 /**
- * Created by 薛贤俊 on 2019/2/15.
+ * Created by 薛雷 on 2019/2/15.
  */
 public class NestedScrollLayout extends FrameLayout implements IFlexible {
 

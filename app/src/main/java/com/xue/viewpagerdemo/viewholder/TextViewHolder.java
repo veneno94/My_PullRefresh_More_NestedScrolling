@@ -10,7 +10,7 @@ import com.xue.viewpagerdemo.common.HolderAnnotation;
 import androidx.annotation.NonNull;
 
 /**
- * Created by 薛贤俊 on 2019/2/22.
+ * Created by 薛雷 on 2019/2/22.
  */
 @HolderAnnotation(layoutId = R.layout.item_text)
 public class TextViewHolder extends BaseViewHolder<String> {

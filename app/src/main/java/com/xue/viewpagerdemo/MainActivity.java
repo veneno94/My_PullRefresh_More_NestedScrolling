@@ -39,7 +39,7 @@ import static com.xue.viewpagerdemo.ViewType.TYPE_PAGER;
 import static com.xue.viewpagerdemo.ViewType.TYPE_PARENT;
 
 /**
- * Created by 薛贤俊 on 2019/2/21.
+ * Created by 薛雷 on 2019/2/21.
  */
 public class MainActivity extends AppCompatActivity {
 

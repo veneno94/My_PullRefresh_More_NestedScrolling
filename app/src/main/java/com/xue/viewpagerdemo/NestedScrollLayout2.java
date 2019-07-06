@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 
 /**
- * Created by 薛贤俊 on 2019/2/22.
+ * Created by 薛雷 on 2019/2/22.
  */
 public class NestedScrollLayout2 extends FrameLayout implements NestedScrollingParent2 {
 
