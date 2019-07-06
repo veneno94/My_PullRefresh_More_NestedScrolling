@@ -18,11 +18,16 @@ import androidx.viewpager.widget.ViewPager;
 import com.xue.viewpagerdemo.common.AdapterItem;
 import com.xue.viewpagerdemo.common.BaseAdapter;
 import com.xue.viewpagerdemo.common.BaseViewHolder;
+import com.xue.viewpagerdemo.event.RefreshEvent;
 import com.xue.viewpagerdemo.items.TextItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
 import com.xue.viewpagerdemo.recyclerview.EndlessGridRecyclerOnScrollListener;
 import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
 import com.xue.viewpagerdemo.viewholder.TextViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ public class SubFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.goods_list, container, false);
         init(view);
         initEvent();
@@ -78,7 +84,7 @@ public class SubFragment extends Fragment {
                             //模拟网络请求 加载数据
                             Thread.sleep(500);
                             final List<AdapterItem> itemList = new ArrayList<>();
-                            for (int i = 0; i < 20; i++) {
+                            for (int i = adapter.getItemList().size(); i < adapter.getItemList().size()+20; i++) {
                                 itemList.add(new TextItem("text" + i));
                             }
 
@@ -100,6 +106,22 @@ public class SubFragment extends Fragment {
                 }).start();
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedChange(RefreshEvent event) {
+        if (adapter != null && recyclerView!=null) {
+            recyclerView.onRefresh();
+            adapter.clearList();
+            final List<AdapterItem> itemList = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                itemList.add(new TextItem("text" + i));
+            }
+            adapter.setItemList(itemList);
+            recyclerView.setPullLoadMoreCompleted();
+            adapter.notifyDataSetChanged();
+
+        }
     }
 
 
@@ -149,5 +171,11 @@ public class SubFragment extends Fragment {
             return currentItem == position;
         }
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

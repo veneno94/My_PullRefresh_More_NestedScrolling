@@ -21,6 +21,7 @@ import com.xue.viewpagerdemo.callback.OnRefreshListener;
 import com.xue.viewpagerdemo.common.AdapterItem;
 import com.xue.viewpagerdemo.common.BaseAdapter;
 import com.xue.viewpagerdemo.common.BaseViewHolder;
+import com.xue.viewpagerdemo.event.RefreshEvent;
 import com.xue.viewpagerdemo.items.PageItem;
 import com.xue.viewpagerdemo.items.ParentItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
@@ -28,6 +29,8 @@ import com.xue.viewpagerdemo.model.PageVO;
 import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
 import com.xue.viewpagerdemo.viewholder.ImageViewHolder;
 import com.xue.viewpagerdemo.viewholder.PagerViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        EventBus.getDefault().post(new RefreshEvent());
                                         container.onRefreshComplete();
                                     }
                                 });

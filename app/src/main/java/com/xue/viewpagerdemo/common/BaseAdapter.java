@@ -38,6 +38,16 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
+    public List<AdapterItem> getItemList() {
+        return itemList;
+    }
+
+    public void clearList(){
+        if (itemList != null) {
+            itemList.clear();
+        }
+    }
+
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
