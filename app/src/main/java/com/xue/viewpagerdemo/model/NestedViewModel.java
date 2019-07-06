@@ -17,6 +17,8 @@ public class NestedViewModel extends ViewModel {
 
     private MutableLiveData<RecyclerView> childList;
 
+    private MutableLiveData<View> tabLayout;
+
     public MutableLiveData<Integer> getPagerHeight() {
         if (pagerHeight == null) {
             pagerHeight = new MutableLiveData<>();
@@ -36,5 +38,12 @@ public class NestedViewModel extends ViewModel {
             childList = new MutableLiveData<>();
         }
         return childList;
+    }
+
+    public MutableLiveData<View> getTabLayout() {
+        if (tabLayout == null) {
+            tabLayout = new MutableLiveData<>();
+        }
+        return tabLayout;
     }
 }

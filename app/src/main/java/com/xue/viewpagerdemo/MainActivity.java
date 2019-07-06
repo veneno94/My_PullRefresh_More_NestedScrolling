@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -109,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         StatusBarUtil.darkMode(this);
+        viewModel.getTabLayout().observe(this, new Observer<View>() {
+            @Override
+            public void onChanged(View view) {
+                if (view != null) {
+                    StatusBarUtil.setPaddingSmart(MainActivity.this,view);
+                }
+            }
+        });
     }
 
     private void initAdapter() {
