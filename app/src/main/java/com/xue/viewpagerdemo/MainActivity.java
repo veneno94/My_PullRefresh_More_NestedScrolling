@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             itemList.add(new ParentItem(bitmap));
         }
         List<PageVO> pageList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             pageList.add(new PageVO(Color.WHITE, "tab" + i));
         }
         itemList.add(new PageItem(pageList));
