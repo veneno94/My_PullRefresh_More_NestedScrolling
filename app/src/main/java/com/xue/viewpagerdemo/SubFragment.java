@@ -5,14 +5,11 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.xue.viewpagerdemo.common.AdapterItem;
@@ -21,7 +18,6 @@ import com.xue.viewpagerdemo.common.BaseViewHolder;
 import com.xue.viewpagerdemo.event.RefreshEvent;
 import com.xue.viewpagerdemo.items.TextItem;
 import com.xue.viewpagerdemo.model.NestedViewModel;
-import com.xue.viewpagerdemo.recyclerview.EndlessGridRecyclerOnScrollListener;
 import com.xue.viewpagerdemo.recyclerview.HeadFootRecyclerView;
 import com.xue.viewpagerdemo.viewholder.TextViewHolder;
 
@@ -59,7 +55,7 @@ public class SubFragment extends Fragment {
     private void init(View view) {
         int color = getArguments().getInt("color");
         recyclerView = view.findViewById(R.id.recyclerview);
-        recyclerView.setLinearLayout();
+        recyclerView.setStaggeredGridLayout(2);
         recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setBackgroundColor(color);
 
@@ -83,20 +79,28 @@ public class SubFragment extends Fragment {
                         try {
                             //模拟网络请求 加载数据
                             Thread.sleep(500);
-                            final List<AdapterItem> itemList = new ArrayList<>();
-                            for (int i = adapter.getItemList().size(); i < adapter.getItemList().size()+20; i++) {
-                                itemList.add(new TextItem("text" + i));
+
+                            int size = adapter.getItemList().size();
+                            if(size>200){
+                                recyclerView.setNoMore("已经到底啦");
+                                adapter.notifyDataSetChanged();
+                            }else {
+                                final List<AdapterItem> itemList = new ArrayList<>();
+                                for (int i = adapter.getItemList().size(); i < adapter.getItemList().size()+20; i++) {
+                                    itemList.add(new TextItem("text" + i));
+                                }
+
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setItemList(itemList);
+                                        recyclerView.setPullLoadMoreCompleted();
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                             }
 
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.setItemList(itemList);
-                                    recyclerView.setPullLoadMoreCompleted();
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
 
 
                         } catch (Exception e) {
