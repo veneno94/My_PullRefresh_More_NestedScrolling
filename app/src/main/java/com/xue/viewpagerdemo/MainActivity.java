@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
+//        refreshLayout.autoRefresh();
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
