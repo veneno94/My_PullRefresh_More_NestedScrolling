@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -17,8 +18,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xue.viewpagerdemo.callback.OnReadyPullListener;
-import com.xue.viewpagerdemo.callback.OnRefreshListener;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.xue.viewpagerdemo.common.AdapterItem;
 import com.xue.viewpagerdemo.common.BaseAdapter;
 import com.xue.viewpagerdemo.common.BaseViewHolder;
@@ -55,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private View headView;
     private ImageView headIv;
+    private RefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_generation);
+        refreshLayout = findViewById(R.id.refreshLayout);
         container = findViewById(R.id.rootview);
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setNestedScrollingEnabled(true);
@@ -77,37 +80,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        container.setReadyListener(new OnReadyPullListener() {
+        
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public boolean isReady() {
-                return mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                EventBus.getDefault().post(new RefreshEvent());
+                refreshLayout.finishRefresh();
             }
-        })
-                .setRefreshable(true)
-                .setHeader(headIv)
-                .setDefaultRefreshView(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshing() {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                //刷新完成后需要调用onRefreshComplete()通知FlexibleLayout
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        EventBus.getDefault().post(new RefreshEvent());
-                                        container.onRefreshComplete();
-                                    }
-                                });
-                            }
-                        }).start();
-                    }
-                });
+        });
+
 
         StatusBarUtil.darkMode(this);
         viewModel.getTabLayout().observe(this, new Observer<View>() {
